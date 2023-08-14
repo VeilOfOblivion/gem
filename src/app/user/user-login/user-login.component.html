@@ -1,0 +1,41 @@
+<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <mat-form-field>
+        <mat-label for="username">Username:</mat-label>
+        <input
+            matInput
+            ngModel
+            type="text"
+            id="username"
+            name="username"
+            autocomplete="username"
+            required
+            #username="ngModel"
+        />
+    </mat-form-field>
+    <span class="error" *ngIf="username.invalid && username.touched">
+        Bitte einen gültigen Benutzernamen eingeben!
+    </span>
+
+    <mat-form-field>
+        <mat-label for="password">Password:</mat-label>
+        <input
+            matInput
+            ngModel
+            type="password"
+            id="password"
+            name="password"
+            autocomplete="current-password"
+            required
+            #password="ngModel"
+        />
+    </mat-form-field>
+    <span class="error" *ngIf="password.invalid && password.touched">
+        Bitte ein gültiges Passwort eingeben!
+    </span>
+    <div class="error" *ngIf="wrongCredentials">
+        Benutzername und Passwort stimmen nicht überein!
+    </div>
+    <button [disabled]="f.invalid" type="submit">Login</button>
+    Noch nicht registriert?
+    <a routerLink="../register">Einfach hier klicken!</a>
+</form>

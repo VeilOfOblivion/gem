@@ -1,0 +1,17 @@
+form {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  button {
+    margin-bottom: 1rem;
+  }
+  .error {
+    color: red;
+    font-size: 0.6rem;
+    position: relative;
+    top: -1.3rem ;
+  }
+  
