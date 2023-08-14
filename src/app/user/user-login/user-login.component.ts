@@ -20,10 +20,12 @@ export class UserLoginComponent  implements OnInit, OnDestroy{
   ngOnInit() {
     this.currentUser = this.userService.currentUser;
     if (this.currentUser) this.loggedIn();
-    this.userSub = this.userService.onUserChange.subscribe((user) => {
-      this.currentUser = user;
-      this.loggedIn();
-    });
+    else {
+      this.userSub = this.userService.onUserChange.subscribe((user) => {
+        this.currentUser = user;
+        this.loggedIn();
+      });
+    }
   }
 
   ngOnDestroy() {
