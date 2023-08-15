@@ -17,28 +17,26 @@ export class UserLoginComponent  implements OnInit, OnDestroy{
   
   constructor(public userService: UserService, public router: Router) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.currentUser = this.userService.currentUser;
-    if (this.currentUser) this.loggedIn();
-    else {
-      this.userSub = this.userService.onUserChange.subscribe((user) => {
-        this.currentUser = user;
-        this.loggedIn();
-      });
-    }
+    this.userSub = this.userService.onUserChange.subscribe((user) => {
+      this.currentUser = user;
+      this.navigateAwayIfLoggedIn();
+    });
+    this.navigateAwayIfLoggedIn();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.userSub?.unsubscribe();
   }
 
-  private loggedIn() {
-    console.log(this.currentUser);
-    this.router.navigate(['user'])
+  private navigateAwayIfLoggedIn(): void {
+    if (this.currentUser != undefined) {
+      this.router.navigate(['user']);
+    }
   }
 
-  public onSubmit(form: NgForm) {
-    console.log("Submitted");
+  public onSubmit(form: NgForm): void {
     this.userService.login(form.value.username, form.value.password, () => {this.wrongCredentials = true;});
   }
 }
