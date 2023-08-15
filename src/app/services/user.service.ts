@@ -14,21 +14,26 @@ export class UserService {
 
   constructor(public http: HttpClient) { }
 
-  public login(username: string, password: string, onWrongCredentials: () => void = () => { }) {
+  public login(username: string, password: string, onWrongCredentials: () => void = () => { }): void {
     let body = { username: username, password: password };
     this.http.post<{ token: string, user: User }>(environment.apiUrl + "/user/login", body).subscribe({
       next: (data) => {
-        console.log("Logged In");
         this.currentUser = data.user;
         this.token = data.token;
         this.onUserChange.next(this.currentUser);
       },
       error: (error) => {
-        console.log(error);
+        console.error(error);
         this.currentUser = undefined;
         this.onUserChange.next(this.currentUser);
         onWrongCredentials();
+        
       }
     });
+  }
+
+  public logout(): void {
+    this.currentUser = undefined;
+    this.onUserChange.next(undefined);
   }
 }
