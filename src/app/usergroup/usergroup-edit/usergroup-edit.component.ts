@@ -23,7 +23,8 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.id = this.route.snapshot.params["id"];
     this.initForm();
-    this.userGroupsService.getUserGroupById(this.id, this.updateUserGroup.bind(this));
+    if (this.id) 
+      this.userGroupsService.getUserGroupById(this.id, this.updateUserGroup.bind(this));
   }
 
   ngOnDestroy(): void {

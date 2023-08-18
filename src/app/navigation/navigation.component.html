@@ -2,9 +2,7 @@
     <mat-toolbar color="primary">
         <span><a mat-button routerLink="/">Startseite</a></span>
         <span><a mat-button routerLink="/events/list">Events</a></span>
-        <span *ngIf="userService.currentUser">
-            <a mat-button routerLink="/groups">Gruppen</a>
-        </span>
+        <span><a mat-button routerLink="/groups">Gruppen</a></span>
         <span *ngIf="!userService.currentUser">
             <a mat-button routerLink="/user/login">Anmelden</a>
         </span>

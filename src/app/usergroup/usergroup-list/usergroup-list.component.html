@@ -4,6 +4,10 @@
             <a routerLink="{{group.id}}">{{group.title}}</a>
         </li>
     </ul>
+    <div *ngIf="userService.currentUser != undefined">
+        <hr>
+        <a routerLink="new">Neue Gruppe erstellen</a>
+    </div>
 </div>
 <div>
     <router-outlet></router-outlet>

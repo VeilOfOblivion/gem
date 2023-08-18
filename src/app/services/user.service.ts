@@ -34,6 +34,7 @@ export class UserService {
 
   public logout(): void {
     this.currentUser = undefined;
+    this.token = "";
     this.onUserChange.next(undefined);
   }
 }

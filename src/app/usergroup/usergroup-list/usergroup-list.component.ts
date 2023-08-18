@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserGroup } from 'src/app/models/usergroup.model';
+import { UserService } from 'src/app/services/user.service';
 import { UsergroupsService } from 'src/app/services/usergroups.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class UsergroupListComponent implements OnInit, OnDestroy {
   userGroups: UserGroup[] = [];
   changeUserGroupSub: Subscription | undefined;
   
-  constructor(public userGroupsService: UsergroupsService, ) { }
+  constructor(public userService : UserService, public userGroupsService: UsergroupsService ) { }
   
   ngOnInit(): void {
     this.changeUserGroupSub = this.userGroupsService.onUserGroupChange.subscribe((userGroups) => {

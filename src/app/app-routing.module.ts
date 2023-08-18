@@ -12,6 +12,7 @@ import { UsergroupListComponent } from './usergroup/usergroup-list/usergroup-lis
 import { UsergroupDetailsComponent } from './usergroup/usergroup-details/usergroup-details.component';
 import { UserService } from './services/user.service';
 import { UsergroupsService } from './services/usergroups.service';
+import { GamingeventListComponent } from './gamingevent/gamingevent-list/gamingevent-list.component';
 
 const routes: Routes = [
   { path: 'user/login', component: UserLoginComponent },
@@ -19,16 +20,15 @@ const routes: Routes = [
   { path: 'user/list', component: UserListComponent },
   { path: 'user', component: UserComponent },
   {
-    path: 'events', component: GamingeventComponent, children: [
-      { path: 'new', component: GamingeventEditComponent },
-      { path: 'list', component: GamingeventComponent },
-      { path: ':id/edit', component: GamingeventEditComponent },
+    path: 'events', component: GamingeventListComponent, children: [
+      { path: 'new', component: GamingeventEditComponent, canActivate: [isAuthenticated()] },
+      { path: ':id/edit', component: GamingeventEditComponent, canActivate: [isAuthenticated()] },
       { path: ':id', component: GamingeventDetailsComponent },
     ]
   },
   {
     path: 'groups', component: UsergroupListComponent, children: [
-      { path: 'new', component: UsergroupEditComponent },
+      { path: 'new', component: UsergroupEditComponent, canActivate: [isAuthenticated()] },
       { path: ':id/edit', component: UsergroupEditComponent, canActivate: [isAuthenticated()] },
       { path: ':id', component: UsergroupDetailsComponent },
     ]
