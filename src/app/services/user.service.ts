@@ -27,7 +27,7 @@ export class UserService {
         this.currentUser = undefined;
         this.onUserChange.next(this.currentUser);
         onWrongCredentials();
-        
+
       }
     });
   }

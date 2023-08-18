@@ -1,9 +1,9 @@
 <div>
     <mat-toolbar color="primary">
         <span><a mat-button routerLink="/">Startseite</a></span>
-        <span><a mat-button routerLink="/events">Events</a></span>
+        <span><a mat-button routerLink="/events/list">Events</a></span>
         <span *ngIf="userService.currentUser">
-            <a mat-button routerLink="/groups">Gruppen</a>
+            <a mat-button routerLink="/groups/list">Gruppen</a>
         </span>
         <span *ngIf="!userService.currentUser">
             <a mat-button routerLink="/user/login">Anmelden</a>
@@ -18,7 +18,9 @@
             <a mat-button routerLink="/user">Benutzerdetails</a>
         </span>
         <span *ngIf="userService.currentUser">
-            <a mat-button (click)="logout()" *ngIf="userService.currentUser">Abmelden</a>
+            <a mat-button (click)="logout()" *ngIf="userService.currentUser">
+                Abmelden
+            </a>
         </span>
     </mat-toolbar>
 </div>

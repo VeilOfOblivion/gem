@@ -9,6 +9,7 @@ import { GamingeventDetailsComponent } from './gamingevent/gamingevent-details/g
 import { UsergroupComponent } from './usergroup/usergroup.component';
 import { UsergroupEditComponent } from './usergroup/usergroup-edit/usergroup-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
+import { UsergroupListComponent } from './usergroup/usergroup-list/usergroup-list.component';
 
 const routes: Routes = [
   { path: 'user/login', component: UserLoginComponent },
@@ -17,15 +18,17 @@ const routes: Routes = [
   { path: 'user', component: UserComponent },
   {
     path: 'events', component: GamingeventComponent, children: [
-      { path: 'new', component: GamingeventEditComponent},
+      { path: 'new', component: GamingeventEditComponent },
+      { path: 'list', component: GamingeventComponent },
       { path: ':id/edit', component: GamingeventEditComponent },
       { path: ':id', component: GamingeventDetailsComponent },
     ]
   },
   {
     path: 'groups', component: UsergroupComponent, children: [
-      { path: 'new', component: UsergroupEditComponent},
-      { path: ':id/edit', component: UsergroupEditComponent},
+      { path: 'new', component: UsergroupEditComponent },
+      { path: 'list', component: UsergroupListComponent },
+      { path: ':id/edit', component: UsergroupEditComponent },
       { path: ':id', component: UsergroupComponent },
     ]
   },

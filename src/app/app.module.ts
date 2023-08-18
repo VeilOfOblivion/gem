@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
@@ -23,6 +23,7 @@ import { GamingeventDetailsComponent } from './gamingevent/gamingevent-details/g
 import { GamingeventListComponent } from './gamingevent/gamingevent-list/gamingevent-list.component';
 import { GamingeventEditComponent } from './gamingevent/gamingevent-edit/gamingevent-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
+import { AddUserDetailsInterceptor } from './interceptors/addUserDetails.interceptor';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,9 @@ import { UserListComponent } from './user/user-list/user-list.component';
     MatInputModule,
     MatFormFieldModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AddUserDetailsInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
