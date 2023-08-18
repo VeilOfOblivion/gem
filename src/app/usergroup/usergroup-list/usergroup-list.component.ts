@@ -14,7 +14,6 @@ export class UsergroupListComponent implements OnInit {
   ngOnInit(): void {
     this.userGroupsService.getAllUserGroups((userGroups) => {
       this.userGroups = userGroups;
-      console.log(this.userGroups);
     });
   }
 

@@ -35,7 +35,7 @@
     <div class="error" *ngIf="wrongCredentials">
         Benutzername und Passwort stimmen nicht überein!
     </div>
-    <button [disabled]="f.invalid" type="submit">Login</button>
+    <button [disabled]="f.invalid"  mat-button color="primary" type="submit">Login</button>
     Noch nicht registriert?
     <a routerLink="../register">Einfach hier klicken!</a>
 </form>

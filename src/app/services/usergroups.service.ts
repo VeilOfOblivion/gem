@@ -8,8 +8,19 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UsergroupsService {
-
   constructor(public userService: UserService, public http: HttpClient) { }
+
+  getUserGroupById(userGroupId: string, onDataFetched: (userGroups: UserGroup | undefined) => void, onError: (error: any) => void = () => { } ): void {
+    this.http.get<UserGroup>(environment.apiUrl + "/user-group/" + userGroupId).subscribe({
+      next: (data) => {
+        onDataFetched(data);
+      },
+      error: (error) => {
+        onDataFetched(undefined);
+        onError(error);
+      },
+    });
+  }
 
   getAllUserGroups(onDataFetched: (userGroups: UserGroup[]) => void, onError: (error: any) => void = () => { }) {
     this.http.get<UserGroup[]>(environment.apiUrl + "/user-group/list").subscribe({

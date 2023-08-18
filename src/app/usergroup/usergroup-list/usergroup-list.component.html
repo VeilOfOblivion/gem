@@ -1,6 +1,10 @@
-All Groups:
-<ul>
-    <li *ngFor="let group of userGroups">
-        {{group.title}}
-    </li>
-</ul>
+<div>All Groups:
+    <ul>
+        <li *ngFor="let group of userGroups">
+            <a routerLink="{{group.id}}">{{group.title}}</a>
+        </li>
+    </ul>
+</div>
+<div>
+    <router-outlet></router-outlet>
+</div>

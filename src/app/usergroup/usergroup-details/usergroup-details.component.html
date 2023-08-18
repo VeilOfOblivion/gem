@@ -1,1 +1,45 @@
-<p>usergroup-details works!</p>
+<div *ngIf="userGroup">
+    <div>Titel: {{userGroup.title}}</div>
+    <div>Beschreibung: {{userGroup.description}}</div>
+    <div>
+        Eigentümer: {{isOwner ? "Du": userGroup.owner}}
+    </div>
+    <div>
+        <a routerLink="edit">Edit</a>
+    </div>
+<!-- 
+    <div *ngIf="canInviteUsers">
+        <a routerLink="edit">Editieren</a>
+        <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+            <mat-form-field>
+                <mat-label for="invitee">Benutzer</mat-label>
+                <input
+                    matInput
+                    ngModel
+                    type="text"
+                    name="invitee"
+                    id="invitee"
+                    required
+                    #username="ngModel"
+                />
+            </mat-form-field>
+            <button mat-button [disabled]="f.invalid" type="submit">
+                Einladen
+            </button>
+        </form>
+    </div>
+
+    <div *ngIf="isInvited">
+        <a routerLink="." (click)="acceptInvitation()">Einladung akzeptieren</a>
+    </div>
+    <div *ngIf="isInvited">
+        <a routerLink="." (click)="removeInvitation()">Einladung verwerfen</a>
+    </div>
+    <div *ngIf="isMember">
+        <a routerLink="." (click)="leaveGroup()">Gruppe verlassen</a>
+    </div>
+    <div *ngIf="!isMember && !isInvited && !isOwner">
+        <a routerLink="." (click)="joinGroup()">Gruppe beitreten</a>
+    </div>
+-->
+</div>

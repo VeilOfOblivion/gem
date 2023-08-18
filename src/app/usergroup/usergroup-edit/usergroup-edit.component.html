@@ -1,1 +1,11 @@
-<p>usergroup-edit works!</p>
+<form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <mat-label>Title:</mat-label>
+        <input matInput type="text" formControlName="title"/>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Beschreibung:</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+    <button  mat-button color="primary" type="submit">Speichern</button>
+</form>
