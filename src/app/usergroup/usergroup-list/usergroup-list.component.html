@@ -1,10 +1,34 @@
-<div>All Groups:
-    <ul>
-        <li *ngFor="let group of userGroups">
-            <a routerLink="{{group.id}}">{{group.title}}</a>
-        </li>
-    </ul>
-    <div *ngIf="userService.currentUser != undefined">
+<div>
+    Eigene Gruppen:
+    <div *ngIf="ownedGroups.length == 0">Keine</div>
+    <div *ngIf="ownedGroups.length > 0">
+        <ul>
+            <li *ngFor="let group of ownedGroups">
+                <a routerLink="{{group.id}}">{{group.title}}</a>
+            </li>
+        </ul>
+    </div>
+    <hr>
+    Beigetretene Gruppen:
+    <div *ngIf="joinedGroups.length == 0">Keine</div>
+    <div *ngIf="joinedGroups.length > 0">
+        <ul>
+            <li *ngFor="let group of joinedGroups">
+                <a routerLink="{{group.id}}">{{group.title}}</a>
+            </li>
+        </ul>
+    </div>
+    <hr>
+    Andere Gruppen:
+    <div *ngIf="otherGroups.length == 0">Keine</div>
+    <div *ngIf="otherGroups.length > 0">
+        <ul>
+            <li *ngFor="let group of otherGroups">
+                <a routerLink="{{group.id}}">{{group.title}}</a>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="userService.currentUser">
         <hr>
         <a routerLink="new">Neue Gruppe erstellen</a>
     </div>

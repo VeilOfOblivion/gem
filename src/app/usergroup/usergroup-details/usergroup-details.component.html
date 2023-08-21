@@ -4,9 +4,15 @@
     <div>
         Eigentümer: {{isOwner ? "Du": userGroup.owner}}
     </div>
-    <div *ngIf="isOwner">
-        <div><button mat-button routerLink="edit">Edit</button></div>
-        <div><button mat-button color="warn" (click)="onDelete()">Delete</button></div>
+    <div *ngIf="userService.currentUser">
+        <div *ngIf="isOwner">
+            <div><button mat-button routerLink="edit">Edit</button></div>
+            <div><button mat-button color="warn" (click)="onDelete()">Delete</button></div>
+        </div>
+        <div *ngIf="!isOwner">
+            <div *ngIf="!hasJoined"><button mat-button (click)="onJoin()">Beitreten</button></div>
+            <div *ngIf="hasJoined"><button mat-button (click)="onLeave()">Verlassen</button></div>
+        </div>
     </div>
     <!--
     <div *ngIf="canInviteUsers">

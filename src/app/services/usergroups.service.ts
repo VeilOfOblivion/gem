@@ -63,6 +63,7 @@ export class UsergroupsService {
   }
 
   deleteById(userGroupId: string) {
+    if (!this.userService.currentUser) return;
     const group = this.getUserGroupById(userGroupId, (group) => {
       this.http.delete(environment.apiUrl + "/user-group/" + userGroupId + "/remove").subscribe({
         next: (data) => {
@@ -73,5 +74,25 @@ export class UsergroupsService {
       });
     })
     
+  }
+
+  joinById(userGroupId: string) {
+    if (!this.userService.currentUser) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/join","").subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }})
+  }
+
+  leaveById(userGroupId: string) {
+    if (!this.userService.currentUser) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/leave","").subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }})
   }
 }
