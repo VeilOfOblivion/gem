@@ -1,9 +1,8 @@
 import { NgModule, inject } from '@angular/core';
-import { ActivatedRoute, CanActivateFn, Router, RouterModule, Routes } from '@angular/router';
+import { CanActivateFn, Router, RouterModule, Routes } from '@angular/router';
 import { UserLoginComponent } from './user/user-login/user-login.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
 import { UserComponent } from './user/user.component';
-import { GamingeventComponent } from './gamingevent/gamingevent.component';
 import { GamingeventEditComponent } from './gamingevent/gamingevent-edit/gamingevent-edit.component';
 import { GamingeventDetailsComponent } from './gamingevent/gamingevent-details/gamingevent-details.component';
 import { UsergroupEditComponent } from './usergroup/usergroup-edit/usergroup-edit.component';
@@ -11,7 +10,6 @@ import { UserListComponent } from './user/user-list/user-list.component';
 import { UsergroupListComponent } from './usergroup/usergroup-list/usergroup-list.component';
 import { UsergroupDetailsComponent } from './usergroup/usergroup-details/usergroup-details.component';
 import { UserService } from './services/user.service';
-import { UsergroupsService } from './services/usergroups.service';
 import { GamingeventListComponent } from './gamingevent/gamingevent-list/gamingevent-list.component';
 
 const routes: Routes = [
