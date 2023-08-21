@@ -36,13 +36,13 @@ export class UsergroupsService {
     });
   }
 
-  addGroup(group: UserGroup, onDataStored: (userGroups: UserGroup[]) => void, onError: (error: any) => void = () => { }) {
+  addGroup(group: UserGroup, onDataStored: (userGroup: UserGroup, isNew: boolean) => void, onError: (error: any) => void = () => { }) {
     if (!group.id) {
 
-      this.http.post<UserGroup[]>(environment.apiUrl + "/user-group/add", group).subscribe({
+      this.http.post<{message: string, userGroup: UserGroup}>(environment.apiUrl + "/user-group/add", group).subscribe({
         next: (data) => {
-          onDataStored(data);
           this.getAllUserGroups(groups => this.onUserGroupChange.next(groups));
+          onDataStored(data.userGroup, true);
         },
         error: (error) => {
           onError(error);
@@ -50,15 +50,28 @@ export class UsergroupsService {
       });
     }
     else {
-      this.http.patch<UserGroup[]>(environment.apiUrl + "/user-group/" + group.id + "/update", group).subscribe({
+      this.http.patch<{message: string, userGroup: UserGroup}>(environment.apiUrl + "/user-group/" + group.id + "/update", group).subscribe({
         next: (data) => {
-          onDataStored(data);
           this.getAllUserGroups(groups => this.onUserGroupChange.next(groups));
+          onDataStored(data.userGroup, false);
         },
         error: (error) => {
           onError(error);
         },
       });
     }
+  }
+
+  deleteById(userGroupId: string) {
+    const group = this.getUserGroupById(userGroupId, (group) => {
+      this.http.delete(environment.apiUrl + "/user-group/" + userGroupId + "/remove").subscribe({
+        next: (data) => {
+          this.getAllUserGroups((groups) => {
+            this.onUserGroupChange.next(groups);
+          })
+        }
+      });
+    })
+    
   }
 }

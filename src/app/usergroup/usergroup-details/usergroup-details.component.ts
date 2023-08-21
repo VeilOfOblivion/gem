@@ -23,7 +23,6 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
     this.changeUserGroupSub = this.activeRoute.params.subscribe((params) => {
       this.userGroupService.getUserGroupById(params["id"], this.updateUserGroup.bind(this));
     });
-
   }
 
   ngOnDestroy(): void {
@@ -36,5 +35,11 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
       this.isOwner = true;
     else 
       this.isOwner = false;
+  }
+
+  onDelete() {
+    if (!this.userGroup || this.userGroup.ownerId != this.userService.currentUser?.id) return;
+    this.userGroupService.deleteById(this.userGroup.id);
+    this.router.navigate([".."], { relativeTo: this.activeRoute});
   }
 }

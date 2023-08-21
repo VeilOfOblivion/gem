@@ -5,7 +5,8 @@
         Eigentümer: {{isOwner ? "Du": userGroup.owner}}
     </div>
     <div *ngIf="isOwner">
-        <a routerLink="edit">Edit</a>
+        <div><button mat-button routerLink="edit">Edit</button></div>
+        <div><button mat-button color="warn" (click)="onDelete()">Delete</button></div>
     </div>
     <!--
     <div *ngIf="canInviteUsers">
