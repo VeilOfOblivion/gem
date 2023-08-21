@@ -51,7 +51,7 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
       if (this.groupForm.invalid) return;
       let title = this.groupForm.value.title;
       let description = this.groupForm.value.description;
-      let group = new UserGroup(this.id, title, description, this.userService.currentUser.id, this.userService.currentUser.username, true, true, false, [], [], []);
+      let group = new UserGroup(this.id, title, description, this.userService.currentUser.id, this.userService.currentUser.username, true, true, false, false, [], [], [], []);
       this.userGroupsService.addGroup(group, (newGroup: UserGroup, isNew: boolean) => {
         if (isNew)
           this.router.navigate(["..",  newGroup.id], { relativeTo: this.route })
