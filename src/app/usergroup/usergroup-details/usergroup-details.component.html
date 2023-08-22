@@ -10,7 +10,9 @@
             <div><button mat-button color="warn" (click)="onDelete()">Delete</button></div>
         </div>
         <div *ngIf="!isOwner">
-            <div *ngIf="!hasJoined"><button mat-button (click)="onJoin()">Beitreten</button></div>
+            <div *ngIf="!hasJoined && !userGroup.permissionToJoinRequired"><button mat-button (click)="onJoin()">Beitreten</button></div>
+            <div *ngIf="!hasJoined && userGroup.permissionToJoinRequired && !hasRequested"><button mat-button (click)="onRequest()">Beitritt anfragen</button></div>
+            <div *ngIf="!hasJoined && userGroup.permissionToJoinRequired && hasRequested"><button mat-button (click)="onCancelRequest()">Beitrittsanfrage zurückziehen</button></div>
             <div *ngIf="hasJoined"><button mat-button (click)="onLeave()">Verlassen</button></div>
         </div>
     </div>

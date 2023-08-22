@@ -93,6 +93,29 @@ export class UsergroupsService {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
         });
-      }})
+      }
+    });
+  }
+
+  requestById(userGroupId: string) {
+    if (!this.userService.currentUser) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/request","").subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+  
+  cancelRequestById(userGroupId: string) {
+    if (!this.userService.currentUser) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/cancelRequest","").subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
   }
 }

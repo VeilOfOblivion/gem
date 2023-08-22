@@ -15,8 +15,9 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
   userGroup : UserGroup | undefined = undefined;
   user: User | undefined;
   changeUserGroupSub: Subscription | undefined;
-  isOwner: boolean = false;
-  hasJoined: boolean = false;
+  isOwner = false;
+  hasJoined = false;
+  hasRequested = false;
 
   constructor (public userService: UserService, public userGroupService: UsergroupsService, public router : Router, public activeRoute: ActivatedRoute){}
 
@@ -38,6 +39,7 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
     else  {
       this.isOwner = false;
       this.hasJoined = this.userGroup.members.includes(this.userService.currentUser.id);
+      this.hasRequested = this.userGroup.requestsToJoin.includes(this.userService.currentUser.id); 
     }
   }
 
@@ -51,9 +53,19 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
     if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
     this.userGroupService.joinById(this.userGroup.id);
     this.hasJoined = true;
-
   }
 
+  onRequest() {
+    if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
+    this.userGroupService.requestById(this.userGroup.id);
+    this.hasRequested = true;
+  }
+
+  onCancelRequest() {
+    if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
+    this.hasRequested = false;
+    this.userGroupService.cancelRequestById(this.userGroup.id);
+  }
   onLeave() {
     if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
     this.userGroupService.leaveById(this.userGroup.id);
