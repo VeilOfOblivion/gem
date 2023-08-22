@@ -7,5 +7,38 @@
         <mat-label>Beschreibung:</mat-label>
         <textarea matInput formControlName="description"></textarea>
     </mat-form-field>
+    <p>Sichtbarkeit:</p>
+    <mat-checkbox formControlName="registrationRequired">Nur für registrierte Benutzer</mat-checkbox>
+    <mat-checkbox formControlName="visibleToFriends">Für alle Freunde sichtbar</mat-checkbox>
+    <mat-checkbox formControlName="invitationRequired">Einladung benötigt</mat-checkbox>
+    <p>Sonstige Einstellungen:</p>
+    <mat-checkbox formControlName="permissionToJoinRequired">Beitritt benötigt Bestätigung</mat-checkbox>
+    <div *ngIf="hasMembers || hasInvitees || hasRequestors || hasExcludees">
+        <div *ngIf="hasMembers">
+            Mitglieder:
+            <ul>
+                <li *ngFor="let member of selectedGroup?.members">{{member}}</li>
+            </ul>
+        </div>
+        <div *ngIf="hasInvitees">
+            Eingeladene Benutzer:
+            <ul>
+                <li *ngFor="let member of selectedGroup?.invitees">{{member}}</li>
+            </ul>
+        </div>
+        <div *ngIf="hasRequestors">
+            Anfragen:
+            <ul>
+                <li *ngFor="let member of selectedGroup?.requestsToJoin">{{member}}</li>
+            </ul>
+        </div>
+        <div *ngIf="hasExcludees">
+            Ausgeschlossene Benutzer:
+            <ul>
+                <li *ngFor="let member of selectedGroup?.excludees">{{member}}</li>
+            </ul>
+        </div>
+    </div>
+    <hr>
     <button  mat-button color="primary" type="submit">Speichern</button>
 </form>

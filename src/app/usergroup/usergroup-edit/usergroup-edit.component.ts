@@ -17,6 +17,10 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
   selectedSub: Subscription | undefined;
   groupForm: FormGroup = new FormGroup({});
   id: string = "";
+  hasMembers = false;
+  hasInvitees = false;
+  hasRequestors = false;
+  hasExcludees = false;
   
   constructor(public userService: UserService, public userGroupsService: UsergroupsService, public router: Router, public route: ActivatedRoute) { }
 
@@ -33,25 +37,38 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
 
   updateUserGroup(userGroup: UserGroup | undefined): void {
     this.selectedGroup = userGroup;
-    if (this.selectedGroup?.ownerId != this.userService.currentUser?.id) 
+    if (!this.selectedGroup || this.selectedGroup?.ownerId != this.userService.currentUser?.id) 
       this.router.navigate(["../"], {relativeTo:this.route});
-    else 
+    else {
+      this.hasMembers = this.selectedGroup.members.length > 0;
+      this.hasInvitees = this.selectedGroup.invitees.length > 0;
+      this.hasRequestors = this.selectedGroup.requestsToJoin.length > 0;
+      this.hasExcludees = this.selectedGroup.excludees.length > 0;
       this.initForm();
+    }
   }
 
   initForm() {
     this.groupForm = new FormGroup({
       'title': new FormControl(this.selectedGroup?.title),
-      'description': new FormControl(this.selectedGroup?.description)
+      'description': new FormControl(this.selectedGroup?.description),
+      'registrationRequired': new FormControl(this.selectedGroup?.registrationRequired),
+      'invitationRequired': new FormControl(this.selectedGroup?.invitationRequired),
+      'visibleToFriends': new FormControl(this.selectedGroup?.visibleToFriends),
+      'permissionToJoinRequired': new FormControl(this.selectedGroup?.permissionToJoinRequired),
     });
   }
 
   onSubmit(): void {
     if (this.userService.currentUser) {
       if (this.groupForm.invalid) return;
-      let title = this.groupForm.value.title;
-      let description = this.groupForm.value.description;
-      let group = new UserGroup(this.id, title, description, this.userService.currentUser.id, this.userService.currentUser.username, true, true, false, false, [], [], [], [],[]);
+      const title = this.groupForm.value.title;
+      const description = this.groupForm.value.description;
+      const registrationRequired = this.groupForm.value.registrationRequired;
+      const invitationRequired = this.groupForm.value.invitationRequired;
+      const visibleToFriends = this.groupForm.value.visibleToFriends;
+      const permissionToJoinRequired = this.groupForm.value.permissionToJoinRequired;
+      const group = new UserGroup(this.id, title, description, this.userService.currentUser.id, this.userService.currentUser.username, registrationRequired, invitationRequired, visibleToFriends, permissionToJoinRequired, [], [], [], [], [], [], [],[]);
       this.userGroupsService.addGroup(group, (newGroup: UserGroup, isNew: boolean) => {
         if (isNew)
           this.router.navigate(["..",  newGroup.id], { relativeTo: this.route })
