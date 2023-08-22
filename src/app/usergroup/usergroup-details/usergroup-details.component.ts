@@ -14,6 +14,7 @@ import { UsergroupsService } from 'src/app/services/usergroups.service';
 export class UsergroupDetailsComponent implements OnInit, OnDestroy {
   userGroup : UserGroup | undefined = undefined;
   user: User | undefined;
+  changeRouteSub: Subscription | undefined;
   changeUserGroupSub: Subscription | undefined;
   isOwner = false;
   hasJoined = false;
@@ -22,13 +23,15 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
   constructor (public userService: UserService, public userGroupService: UsergroupsService, public router : Router, public activeRoute: ActivatedRoute){}
 
   ngOnInit(): void {
-    this.changeUserGroupSub = this.activeRoute.params.subscribe((params) => {
+    this.changeRouteSub = this.activeRoute.params.subscribe((params) => {
       this.userGroupService.getUserGroupById(params["id"], this.updateUserGroup.bind(this));
     });
+    this.changeUserGroupSub = this.userGroupService.onUserGroupChange.subscribe(userGroups => this.userGroup = userGroups.find(ug => ug.id ===this.userGroup?.id))
   }
 
   ngOnDestroy(): void {
     this.changeUserGroupSub?.unsubscribe();
+    this.changeRouteSub?.unsubscribe();
   }
 
   updateUserGroup(foundUserGroup: UserGroup | undefined): void {
@@ -41,6 +44,7 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
       this.hasJoined = this.userGroup.members.includes(this.userService.currentUser.id);
       this.hasRequested = this.userGroup.requestsToJoin.includes(this.userService.currentUser.id); 
     }
+    console.log("Update UG done")
   }
 
   onDelete() {
@@ -66,9 +70,21 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
     this.hasRequested = false;
     this.userGroupService.cancelRequestById(this.userGroup.id);
   }
+
   onLeave() {
     if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
     this.userGroupService.leaveById(this.userGroup.id);
     this.hasJoined = false;
   }
+
+  onAccept(userId:string) {
+    if (!this.userGroup) return;
+    this.userGroupService.acceptRequestByIds(userId, this.userGroup.id);
+  }
+
+  onReject(userId:string) {
+    if (!this.userGroup) return;
+    this.userGroupService.rejectRequestByIds(userId, this.userGroup.id);
+  }
+
 }

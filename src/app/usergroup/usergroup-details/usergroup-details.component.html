@@ -8,6 +8,12 @@
         <div *ngIf="isOwner">
             <div><button mat-button routerLink="edit">Edit</button></div>
             <div><button mat-button color="warn" (click)="onDelete()">Delete</button></div>
+            <div *ngIf="userGroup.permissionToJoinRequired && userGroup.requestsToJoin.length > 0">
+                Beitrittsanfragen ({{userGroup.requestsToJoin.length}}):
+                <ul>
+                    <li *ngFor="let request of userGroup.requestsToJoin; let i = index">{{userGroup.requestUsernames[i]}} - <button mat-button (click)="onAccept(request)">Annehmen</button><button mat-button color="warn" (click)="onReject(request)">Ablehnen</button></li>
+                </ul>
+            </div>
         </div>
         <div *ngIf="!isOwner">
             <div *ngIf="!hasJoined && !userGroup.permissionToJoinRequired"><button mat-button (click)="onJoin()">Beitreten</button></div>

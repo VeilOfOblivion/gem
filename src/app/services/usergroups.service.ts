@@ -118,4 +118,26 @@ export class UsergroupsService {
       }
     });
   }
+
+  acceptRequestByIds(userId: string, userGroupId: string, ) {
+    if (!this.userService.currentUser) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/acceptRequest",{userId: userId}).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+
+  rejectRequestByIds(userId: string, userGroupId: string, ) {
+    if (!this.userService.currentUser) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/rejectRequest",{userId: userId}).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
 }
