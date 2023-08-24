@@ -16,15 +16,15 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(public userService: UserService, public router: Router, public activeRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    if (!this.userService.currentUser) {
-      this.router.navigate(['login'], {relativeTo: this.activeRoute})
+    if (!this.userService.getCurrentUser()) {
+      this.router.navigate(['login'], { relativeTo: this.activeRoute })
     }
     else {
-      this.currentUser = this.userService.currentUser;
+      this.currentUser = this.userService.getCurrentUser();
       this.userSub = this.userService.onUserChange.subscribe((user) => {
         this.currentUser = user;
-        if (!this.userService.currentUser) {
-          this.router.navigate(['login'], {relativeTo: this.activeRoute})
+        if (!this.userService.getCurrentUser()) {
+          this.router.navigate(['login'], { relativeTo: this.activeRoute })
         }
       });
     }

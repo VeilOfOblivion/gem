@@ -39,14 +39,14 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-function isAuthenticated() : CanActivateFn {
+function isAuthenticated(): CanActivateFn {
   return () => {
     const userService: UserService = inject(UserService);
     const router: Router = inject(Router);
-    if (userService.currentUser ) {
+    if (userService.getCurrentUser()) {
       return true;
     }
-    router.navigate(["user","login"]);
+    router.navigate(["user", "login"]);
     return false;
   };
 }

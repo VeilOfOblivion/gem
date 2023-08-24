@@ -35,43 +35,44 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
   }
 
   updateUserGroup(foundUserGroup: UserGroup | undefined): void {
+    const currentUser = this.userService.getCurrentUser();
     this.userGroup = foundUserGroup;
-    if (!this.userGroup || !this.userService.currentUser) return;
-    if (this.userGroup?.ownerId === this.userService.currentUser?.id)
+    if (!this.userGroup || !currentUser) return;
+    if (this.userGroup?.ownerId === this.userService.getCurrentUser()?.id)
       this.isOwner = true;
     else {
       this.isOwner = false;
-      this.hasJoined = this.userGroup.members.includes(this.userService.currentUser.id);
-      this.hasRequested = this.userGroup.requestsToJoin.includes(this.userService.currentUser.id);
+      this.hasJoined = this.userGroup.members.includes(currentUser.id);
+      this.hasRequested = this.userGroup.requestsToJoin.includes(currentUser.id);
     }
   }
 
   onDelete() {
-    if (!this.userGroup || this.userGroup.ownerId != this.userService.currentUser?.id) return;
+    if (!this.userGroup || this.userGroup.ownerId != this.userService.getCurrentUser()?.id) return;
     this.userGroupService.deleteById(this.userGroup.id);
     this.router.navigate([".."], { relativeTo: this.activeRoute });
   }
 
   onJoin() {
-    if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
+    if (!this.userGroup || this.userGroup.ownerId == this.userService.getCurrentUser()?.id) return;
     this.userGroupService.joinById(this.userGroup.id);
     this.hasJoined = true;
   }
 
   onRequest() {
-    if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
+    if (!this.userGroup || this.userGroup.ownerId == this.userService.getCurrentUser()?.id) return;
     this.userGroupService.requestById(this.userGroup.id);
     this.hasRequested = true;
   }
 
   onCancelRequest() {
-    if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
+    if (!this.userGroup || this.userGroup.ownerId == this.userService.getCurrentUser()?.id) return;
     this.hasRequested = false;
     this.userGroupService.cancelRequestById(this.userGroup.id);
   }
 
   onLeave() {
-    if (!this.userGroup || this.userGroup.ownerId == this.userService.currentUser?.id) return;
+    if (!this.userGroup || this.userGroup.ownerId == this.userService.getCurrentUser()?.id) return;
     this.userGroupService.leaveById(this.userGroup.id);
     this.hasJoined = false;
   }

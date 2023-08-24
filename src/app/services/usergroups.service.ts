@@ -39,7 +39,7 @@ export class UsergroupsService {
   addGroup(group: UserGroup, onDataStored: (userGroup: UserGroup, isNew: boolean) => void, onError: (error: any) => void = () => { }) {
     if (!group.id) {
 
-      this.http.post<{message: string, userGroup: UserGroup}>(environment.apiUrl + "/user-group/add", group).subscribe({
+      this.http.post<{ message: string, userGroup: UserGroup }>(environment.apiUrl + "/user-group/add", group).subscribe({
         next: (data) => {
           this.getAllUserGroups(groups => this.onUserGroupChange.next(groups));
           onDataStored(data.userGroup, true);
@@ -50,7 +50,7 @@ export class UsergroupsService {
       });
     }
     else {
-      this.http.patch<{message: string, userGroup: UserGroup}>(environment.apiUrl + "/user-group/" + group.id + "/update", group).subscribe({
+      this.http.patch<{ message: string, userGroup: UserGroup }>(environment.apiUrl + "/user-group/" + group.id + "/update", group).subscribe({
         next: (data) => {
           this.getAllUserGroups(groups => this.onUserGroupChange.next(groups));
           onDataStored(data.userGroup, false);
@@ -63,7 +63,7 @@ export class UsergroupsService {
   }
 
   deleteById(userGroupId: string) {
-    if (!this.userService.currentUser) return;
+    if (!this.userService.getCurrentUser()) return;
     const group = this.getUserGroupById(userGroupId, (group) => {
       this.http.delete(environment.apiUrl + "/user-group/" + userGroupId + "/remove").subscribe({
         next: (data) => {
@@ -73,22 +73,23 @@ export class UsergroupsService {
         }
       });
     })
-    
+
   }
 
   joinById(userGroupId: string) {
-    if (!this.userService.currentUser) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/join","").subscribe({
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/join", "").subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
         });
-      }})
+      }
+    })
   }
 
   leaveById(userGroupId: string) {
-    if (!this.userService.currentUser) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/leave","").subscribe({
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/leave", "").subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
@@ -98,8 +99,8 @@ export class UsergroupsService {
   }
 
   requestById(userGroupId: string) {
-    if (!this.userService.currentUser) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/request","").subscribe({
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/request", "").subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
@@ -107,10 +108,10 @@ export class UsergroupsService {
       }
     });
   }
-  
+
   cancelRequestById(userGroupId: string) {
-    if (!this.userService.currentUser) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/cancelRequest","").subscribe({
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/cancelRequest", "").subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
@@ -119,9 +120,9 @@ export class UsergroupsService {
     });
   }
 
-  acceptRequestByIds(userId: string, userGroupId: string, ) {
-    if (!this.userService.currentUser) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/acceptRequest",{userId: userId}).subscribe({
+  acceptRequestByIds(userId: string, userGroupId: string,) {
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/acceptRequest", { userId: userId }).subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
@@ -130,9 +131,33 @@ export class UsergroupsService {
     });
   }
 
-  rejectRequestByIds(userId: string, userGroupId: string, ) {
-    if (!this.userService.currentUser) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/rejectRequest",{userId: userId}).subscribe({
+  rejectRequestByIds(userId: string, userGroupId: string,) {
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/rejectRequest", { userId: userId }).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+
+  inviteByUsername(userGroupId: string, username: string) {
+    if (!this.userService.getCurrentUser()) return;
+    console.log("Invite", username);
+    this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/invite", { username: username }).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+
+  excludeByUsername(userGroupId: string, username: string) {
+    if (!this.userService.getCurrentUser()) return;
+    console.log("Exclude", username);
+    this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/invite", { username: username }).subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);

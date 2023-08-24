@@ -8,7 +8,7 @@
             </li>
         </ul>
     </div>
-    <hr>
+    <hr />
     Beigetretene Gruppen:
     <div *ngIf="joinedGroups.length == 0">Keine</div>
     <div *ngIf="joinedGroups.length > 0">
@@ -18,7 +18,7 @@
             </li>
         </ul>
     </div>
-    <hr>
+    <hr />
     Andere Gruppen:
     <div *ngIf="otherGroups.length == 0">Keine</div>
     <div *ngIf="otherGroups.length > 0">
@@ -28,8 +28,8 @@
             </li>
         </ul>
     </div>
-    <div *ngIf="userService.currentUser">
-        <hr>
+    <div *ngIf="userService.getCurrentUser()">
+        <hr />
         <a routerLink="new">Neue Gruppe erstellen</a>
     </div>
 </div>

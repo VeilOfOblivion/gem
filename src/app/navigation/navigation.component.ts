@@ -13,9 +13,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
   currentUser: User | undefined = undefined;
   userSub: Subscription | null = null;
   constructor(public userService: UserService, public router: Router) { }
-  
+
   ngOnInit(): void {
-    this.currentUser = this.userService.currentUser;
+    this.currentUser = this.userService.getCurrentUser();
     this.userSub = this.userService.onUserChange.subscribe((user) => {
       this.currentUser = user;
     })

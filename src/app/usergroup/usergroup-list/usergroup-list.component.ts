@@ -15,9 +15,9 @@ export class UsergroupListComponent implements OnInit, OnDestroy {
   joinedGroups: UserGroup[] = [];
   otherGroups: UserGroup[] = [];
   changeUserGroupSub: Subscription | undefined;
-  
-  constructor(public userService : UserService, public userGroupsService: UsergroupsService ) { }
-  
+
+  constructor(public userService: UserService, public userGroupsService: UsergroupsService) { }
+
   ngOnInit(): void {
     this.changeUserGroupSub = this.userGroupsService.onUserGroupChange.subscribe((userGroups) => {
       this.initUserGroups(userGroups);
@@ -31,9 +31,9 @@ export class UsergroupListComponent implements OnInit, OnDestroy {
     this.changeUserGroupSub?.unsubscribe();
   }
 
-  
+
   initUserGroups(allGroups: UserGroup[]) {
-    const userId = this.userService.currentUser?.id;
+    const userId = this.userService.getCurrentUser()?.id;
     if (!userId) {
       this.otherGroups = allGroups;
       return;
@@ -46,7 +46,7 @@ export class UsergroupListComponent implements OnInit, OnDestroy {
         this.ownedGroups.push(ug);
         return;
       }
-      if (ug.members.includes(userId))  {
+      if (ug.members.includes(userId)) {
         this.joinedGroups.push(ug);
         return;
       }

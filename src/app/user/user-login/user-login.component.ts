@@ -10,15 +10,15 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './user-login.component.html',
   styleUrls: ['./user-login.component.scss']
 })
-export class UserLoginComponent  implements OnInit, OnDestroy{
+export class UserLoginComponent implements OnInit, OnDestroy {
   currentUser: User | undefined = undefined;
   userSub: Subscription | undefined;
   wrongCredentials = false;
-  
+
   constructor(public userService: UserService, public router: Router) { }
 
   ngOnInit(): void {
-    this.currentUser = this.userService.currentUser;
+    this.currentUser = this.userService.getCurrentUser();
     this.userSub = this.userService.onUserChange.subscribe((user) => {
       this.currentUser = user;
       this.navigateAwayIfLoggedIn();
@@ -37,6 +37,6 @@ export class UserLoginComponent  implements OnInit, OnDestroy{
   }
 
   public onSubmit(form: NgForm): void {
-    this.userService.login(form.value.username, form.value.password, () => {this.wrongCredentials = true;});
+    this.userService.login(form.value.username, form.value.password, () => { this.wrongCredentials = true; });
   }
 }

@@ -1,44 +1,82 @@
 <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
     <mat-form-field>
         <mat-label>Title:</mat-label>
-        <input matInput type="text" formControlName="title"/>
+        <input matInput type="text" formControlName="title" />
     </mat-form-field>
     <mat-form-field>
         <mat-label>Beschreibung:</mat-label>
         <textarea matInput formControlName="description"></textarea>
     </mat-form-field>
     <p>Sichtbarkeit:</p>
-    <mat-checkbox formControlName="registrationRequired">Nur für registrierte Benutzer</mat-checkbox>
-    <mat-checkbox formControlName="visibleToFriends">Für alle Freunde sichtbar</mat-checkbox>
-    <mat-checkbox formControlName="invitationRequired">Einladung benötigt</mat-checkbox>
+    <mat-checkbox formControlName="registrationRequired">
+        Nur für registrierte Benutzer
+    </mat-checkbox>
+    <mat-checkbox formControlName="visibleToFriends">
+        Für alle Freunde sichtbar
+    </mat-checkbox>
+    <mat-checkbox formControlName="invitationRequired">
+        Einladung benötigt
+    </mat-checkbox>
     <p>Sonstige Einstellungen:</p>
-    <mat-checkbox formControlName="permissionToJoinRequired">Beitritt benötigt Bestätigung</mat-checkbox>
-    <div *ngIf="hasMembers || hasInvitees || hasRequestors || hasExcludees">
+    <mat-checkbox formControlName="permissionToJoinRequired">
+        Beitritt benötigt Bestätigung
+    </mat-checkbox>
+    <div>
         <div *ngIf="hasMembers">
             Mitglieder:
             <ul>
-                <li *ngFor="let member of selectedGroup?.members">{{member}}</li>
-            </ul>
-        </div>
-        <div *ngIf="hasInvitees">
-            Eingeladene Benutzer:
-            <ul>
-                <li *ngFor="let member of selectedGroup?.invitees">{{member}}</li>
+                <li *ngFor="let member of selectedGroup?.members">
+                    {{member}}
+                </li>
             </ul>
         </div>
         <div *ngIf="hasRequestors">
             Anfragen:
             <ul>
-                <li *ngFor="let member of selectedGroup?.requestsToJoin">{{member}}</li>
+                <li *ngFor="let member of selectedGroup?.requestsToJoin">
+                    {{member}}
+                </li>
+            </ul>
+        </div>
+        <div *ngIf="hasInvitees">
+            Eingeladene Benutzer:
+            <ul>
+                <li *ngFor="let member of selectedGroup?.invitees">
+                    {{member}}
+                </li>
             </ul>
         </div>
         <div *ngIf="hasExcludees">
             Ausgeschlossene Benutzer:
             <ul>
-                <li *ngFor="let member of selectedGroup?.excludees">{{member}}</li>
+                <li *ngFor="let member of selectedGroup?.excludees">
+                    {{member}}
+                </li>
             </ul>
         </div>
     </div>
-    <hr>
-    <button  mat-button color="primary" type="submit">Speichern</button>
+    <hr />
+    <button mat-button color="primary" type="submit">Speichern</button>
 </form>
+<mat-form-field>
+    <mat-label>Benutzer einladen:</mat-label>
+    <input matInput type="text" placeholder="Benutzername" #newInvitee />
+    <button
+        mat-button
+        type="submit"
+        (click)="onInvite(newInvitee.value);newInvitee.value='';"
+    >
+        Einladen
+    </button>
+</mat-form-field>
+<mat-form-field>
+    <mat-label>Benutzer blockieren:</mat-label>
+    <input matInput type="text" placeholder="Benutzername" #newExcludee />
+    <button
+        mat-button
+        type="submit"
+        (click)="onExclude(newExcludee.value);newExcludee.value='';"
+    >
+        Blockieren
+    </button>
+</mat-form-field>

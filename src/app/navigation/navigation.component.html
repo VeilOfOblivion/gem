@@ -3,20 +3,24 @@
         <span><a mat-button routerLink="/">Startseite</a></span>
         <span><a mat-button routerLink="/events/list">Events</a></span>
         <span><a mat-button routerLink="/groups">Gruppen</a></span>
-        <span *ngIf="!userService.currentUser">
+        <span *ngIf="!userService.getCurrentUser()">
             <a mat-button routerLink="/user/login">Anmelden</a>
         </span>
-        <span *ngIf="!userService.currentUser">
+        <span *ngIf="!userService.getCurrentUser()">
             <a mat-button routerLink="/user/register">Registrieren</a>
         </span>
-        <span *ngIf="userService.currentUser">
+        <span *ngIf="userService.getCurrentUser()">
             <a mat-button routerLink="/user/list">Benutzerliste</a>
         </span>
-        <span *ngIf="userService.currentUser">
+        <span *ngIf="userService.getCurrentUser()">
             <a mat-button routerLink="/user">Benutzerdetails</a>
         </span>
-        <span *ngIf="userService.currentUser">
-            <a mat-button (click)="logout()" *ngIf="userService.currentUser">
+        <span *ngIf="userService.getCurrentUser()">
+            <a
+                mat-button
+                (click)="logout()"
+                *ngIf="userService.getCurrentUser()"
+            >
                 Abmelden
             </a>
         </span>
