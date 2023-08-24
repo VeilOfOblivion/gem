@@ -11,20 +11,24 @@ export class UserService {
   onUserChange = new Subject<User | undefined>();
   _currentUser: User | undefined;
   token: string | undefined;
+  expireCB: any;
 
   constructor(public http: HttpClient) { }
 
-  getLocalTokenAndRefresh(onNewTokenReceived: () => void = () => { }) {
+  getLocalTokenAndRefresh() {
+    console.log("refresh token", this.expireCB);
     const localToken = localStorage.getItem("authToken");
     if (localToken) {
       this.token = localToken;
-      this.http.get<{ token: string; user: User; }>(environment.apiUrl + "/user/refresh").subscribe({
+      this.http.get<{ token: string, user: User, exp: number }>(environment.apiUrl + "/user/refresh").subscribe({
         next: (data) => {
           this._currentUser = data.user;
           this.token = data.token;
+          clearTimeout(this.expireCB);
+          let expTime = (new Date(data.exp * 1000).getTime() - new Date().getTime());
+          this.expireCB = setTimeout(() => this.getLocalTokenAndRefresh(), expTime)
           localStorage.setItem("authToken", this.token);
           this.onUserChange.next(this._currentUser);
-          onNewTokenReceived();
         },
         error: (error) => {
           localStorage.removeItem("authToken");
@@ -37,18 +41,21 @@ export class UserService {
 
   login(username: string, password: string, onWrongCredentials: () => void = () => { }): void {
     let body = { username: username, password: password };
-    this.http.post<{ token: string, user: User }>(environment.apiUrl + "/user/login", body).subscribe({
+    this.http.post<{ token: string, user: User, exp: number }>(environment.apiUrl + "/user/login", body).subscribe({
       next: (data) => {
         this._currentUser = data.user;
         this.token = data.token;
+        clearTimeout(this.expireCB);
+        let expTime = (new Date(data.exp * 1000).getTime() - new Date().getTime());
+        this.expireCB = setTimeout(() => this.getLocalTokenAndRefresh(), expTime)
         localStorage.setItem("authToken", this.token);
-        this.onUserChange.next(this.getCurrentUser());
+        this.onUserChange.next(this._currentUser);
       },
       error: (error) => {
         this._currentUser = undefined;
         this.onUserChange.next(undefined);
+        console.log(error)
         onWrongCredentials();
-
       }
     });
   }
