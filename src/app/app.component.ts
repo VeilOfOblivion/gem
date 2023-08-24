@@ -7,4 +7,10 @@ import { User } from './models/user.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{}
+export class AppComponent implements OnInit {
+  constructor(public userService: UserService) { }
+
+  ngOnInit(): void {
+    this.userService.getLocalTokenAndRefresh();
+  }
+}
