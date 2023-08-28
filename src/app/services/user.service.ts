@@ -16,7 +16,6 @@ export class UserService {
   constructor(public http: HttpClient) { }
 
   getLocalTokenAndRefresh() {
-    console.log("refresh token", this.expireCB);
     const localToken = localStorage.getItem("authToken");
     if (localToken) {
       this.token = localToken;

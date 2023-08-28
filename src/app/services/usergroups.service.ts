@@ -144,7 +144,7 @@ export class UsergroupsService {
 
   inviteByUsername(userGroupId: string, username: string) {
     if (!this.userService.getCurrentUser()) return;
-    this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/invite", { username: username }).subscribe({
+    this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/invite", { type: "user", id: username }).subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
@@ -155,7 +155,7 @@ export class UsergroupsService {
 
   excludeByUsername(userGroupId: string, username: string) {
     if (!this.userService.getCurrentUser()) return;
-    this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/invite", { username: username }).subscribe({
+    this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/invite", { type: "user", id: username, username: username }).subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);

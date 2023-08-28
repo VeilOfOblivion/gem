@@ -29,6 +29,9 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
     this.initForm();
     if (this.id)
       this.userGroupsService.getUserGroupById(this.id, this.updateUserGroup.bind(this));
+    this.selectedSub = this.userGroupsService.onUserGroupChange.subscribe((groups: UserGroup[]) => {
+      this.updateUserGroup(groups.find(g => g.id == this.id));
+    });
   }
 
   ngOnDestroy(): void {
@@ -69,7 +72,15 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
       const invitationRequired = this.groupForm.value.invitationRequired;
       const visibleToFriends = this.groupForm.value.visibleToFriends;
       const permissionToJoinRequired = this.groupForm.value.permissionToJoinRequired;
-      const group = new UserGroup(this.id, title, description, currentUser.id, currentUser.username, registrationRequired, invitationRequired, visibleToFriends, permissionToJoinRequired, [], [], [], [], [], [], [], []);
+      const requestsToJoin = this.selectedGroup ? this.selectedGroup.requestsToJoin : [];
+      const requestUsernames = this.selectedGroup ? this.selectedGroup.requestUsernames : [];
+      const invitees = this.selectedGroup ? this.selectedGroup.invitees : [];
+      const inviteeUsernames = this.selectedGroup ? this.selectedGroup.inviteeUsernames : [];
+      const members = this.selectedGroup ? this.selectedGroup.members : [];
+      const memberUsernames = this.selectedGroup ? this.selectedGroup.memberUsernames : [];
+      const excludees = this.selectedGroup ? this.selectedGroup.excludees : [];
+      const excludeeUsernames = this.selectedGroup ? this.selectedGroup.excludeeUsernames : [];
+      const group = new UserGroup(this.id, title, description, currentUser.id, currentUser.username, registrationRequired, invitationRequired, visibleToFriends, permissionToJoinRequired, requestsToJoin, invitees, members, excludees, memberUsernames, inviteeUsernames, excludeeUsernames, requestUsernames);
       this.userGroupsService.addGroup(group, (newGroup: UserGroup, isNew: boolean) => {
         if (isNew)
           this.router.navigate(["..", newGroup.id], { relativeTo: this.route })
@@ -87,5 +98,4 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
     if (!this.selectedGroup) return;
     this.userGroupsService.excludeByUsername(this.selectedGroup.id, username);
   }
-
 }
