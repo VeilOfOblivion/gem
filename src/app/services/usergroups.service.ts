@@ -131,17 +131,7 @@ export class UsergroupsService {
     });
   }
 
-  rejectRequestByIds(userId: string, userGroupId: string,) {
-    if (!this.userService.getCurrentUser()) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/rejectRequest", { userId: userId }).subscribe({
-      next: () => {
-        this.getAllUserGroups((groups) => {
-          this.onUserGroupChange.next(groups);
-        });
-      }
-    });
-  }
-
+  
   inviteByUsername(userGroupId: string, username: string) {
     if (!this.userService.getCurrentUser()) return;
     this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/invite", { type: "user", id: username }).subscribe({
@@ -155,7 +145,51 @@ export class UsergroupsService {
 
   excludeByUsername(userGroupId: string, username: string) {
     if (!this.userService.getCurrentUser()) return;
-    this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/invite", { type: "user", id: username, username: username }).subscribe({
+    this.http.post(environment.apiUrl + "/user-group/" + userGroupId + "/exclude", { type: "user", name: username }).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+
+  removeMemberByIds(userGroupId: string, userId: string) {
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeMember", { id: userId }).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+
+  removeRequestByIds(userGroupId: string, userId: string ) {
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeRequest", { userId: userId }).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+
+  removeInviteeByIds(userGroupId: string, userId: string ) {
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeInvitee", { userId: userId }).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+
+  removeExcludeeByIds(userGroupId: string, userId: string) {
+    if (!this.userService.getCurrentUser()) return;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeExcludee", { userId: userId }).subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);

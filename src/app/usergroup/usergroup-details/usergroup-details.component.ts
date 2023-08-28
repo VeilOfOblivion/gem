@@ -84,7 +84,7 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
 
   onReject(userId: string) {
     if (!this.userGroup) return;
-    this.userGroupService.rejectRequestByIds(userId, this.userGroup.id);
+    this.userGroupService.removeRequestByIds(userId, this.userGroup.id);
   }
 
 }

@@ -21,43 +21,43 @@
     <mat-checkbox formControlName="permissionToJoinRequired">
         Beitritt benötigt Bestätigung
     </mat-checkbox>
-    <div>
-        <div *ngIf="hasMembers">
-            Mitglieder:
-            <ul>
-                <li *ngFor="let member of selectedGroup?.members">
-                    {{member}}
-                </li>
-            </ul>
-        </div>
-        <div *ngIf="hasRequestors">
-            Anfragen:
-            <ul>
-                <li *ngFor="let member of selectedGroup?.requestsToJoin">
-                    {{member}}
-                </li>
-            </ul>
-        </div>
-        <div *ngIf="hasInvitees">
-            Eingeladene Benutzer:
-            <ul>
-                <li *ngFor="let member of selectedGroup?.invitees">
-                    {{member}}
-                </li>
-            </ul>
-        </div>
-        <div *ngIf="hasExcludees">
-            Ausgeschlossene Benutzer:
-            <ul>
-                <li *ngFor="let member of selectedGroup?.excludees">
-                    {{member}}
-                </li>
-            </ul>
-        </div>
-    </div>
     <hr />
     <button mat-button color="primary" type="submit">Speichern</button>
 </form>
+<div>
+    <div *ngIf="hasMembers">
+        Mitglieder:
+        <ul>
+            <li *ngFor="let member of selectedGroup?.memberUsernames; let i = index;">
+                {{member}} <button mat-button color="warn" (click)="onRemoveMember(i)">X</button>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="hasRequestors">
+        Anfragen:
+        <ul>
+            <li *ngFor="let requestor of selectedGroup?.requestUsernames; let i = index;">
+                {{requestor}} <button mat-button color="warn" (click)="onRemoveRequestor(i)">X</button>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="hasInvitees">
+        Eingeladene Benutzer:
+        <ul>
+            <li *ngFor="let invitee of selectedGroup?.inviteeUsernames; let i = index;">
+                {{invitee}} <button mat-button color="warn" (click)="onRemoveInvitee(i)">X</button>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="hasExcludees">
+        Ausgeschlossene Benutzer:
+        <ul>
+            <li *ngFor="let excludee of selectedGroup?.excludeeUsernames; let i = index;">
+                {{excludee}} <button mat-button color="warn" (click)="onRemoveExcludee(i)">X</button>
+            </li>
+        </ul>
+    </div>
+</div>
 <mat-form-field>
     <mat-label>Benutzer einladen:</mat-label>
     <input matInput type="text" placeholder="Benutzername" #newInvitee />

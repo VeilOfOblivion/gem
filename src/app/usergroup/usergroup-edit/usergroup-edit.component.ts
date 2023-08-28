@@ -98,4 +98,28 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
     if (!this.selectedGroup) return;
     this.userGroupsService.excludeByUsername(this.selectedGroup.id, username);
   }
+
+  onRemoveMember(index: number) {
+    if (!this.selectedGroup) return;
+    const id = this.selectedGroup?.members[index];
+    this.userGroupsService.removeMemberByIds(this.selectedGroup?.id, id);
+  }
+
+  onRemoveRequestor(index: number) {
+    if (!this.selectedGroup) return;
+    const id = this.selectedGroup?.requestsToJoin[index];
+    this.userGroupsService.removeRequestByIds(this.selectedGroup?.id, id);
+  }
+
+  onRemoveInvitee(index: number) {
+    if (!this.selectedGroup) return;
+    const id = this.selectedGroup?.invitees[index];
+    this.userGroupsService.removeInviteeByIds(this.selectedGroup?.id, id);
+  }
+
+  onRemoveExcludee(index: number) {
+    if (!this.selectedGroup) return;
+    const id = this.selectedGroup?.excludees[index];
+    this.userGroupsService.removeExcludeeByIds(this.selectedGroup?.id, id);
+  }
 }
