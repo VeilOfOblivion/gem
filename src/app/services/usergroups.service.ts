@@ -167,7 +167,7 @@ export class UsergroupsService {
 
   removeRequestByIds(userGroupId: string, userId: string ) {
     if (!this.userService.getCurrentUser()) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeRequest", { userId: userId }).subscribe({
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeRequest", { id: userId }).subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
@@ -178,7 +178,7 @@ export class UsergroupsService {
 
   removeInviteeByIds(userGroupId: string, userId: string ) {
     if (!this.userService.getCurrentUser()) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeInvitee", { userId: userId }).subscribe({
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeInvitee", { id: userId }).subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
@@ -189,7 +189,7 @@ export class UsergroupsService {
 
   removeExcludeeByIds(userGroupId: string, userId: string) {
     if (!this.userService.getCurrentUser()) return;
-    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeExcludee", { userId: userId }).subscribe({
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + "/removeExcludee", { id: userId }).subscribe({
       next: () => {
         this.getAllUserGroups((groups) => {
           this.onUserGroupChange.next(groups);
