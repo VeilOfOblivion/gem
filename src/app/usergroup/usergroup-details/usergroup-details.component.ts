@@ -16,6 +16,7 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
   user: User | undefined;
   changeRouteSub: Subscription | undefined;
   changeUserGroupSub: Subscription | undefined;
+  canEdit = false;
   isOwner = false;
   hasJoined = false;
   hasRequested = false;
@@ -38,13 +39,10 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
     const currentUser = this.userService.getCurrentUser();
     this.userGroup = foundUserGroup;
     if (!this.userGroup || !currentUser) return;
-    if (this.userGroup?.ownerId === this.userService.getCurrentUser()?.id)
-      this.isOwner = true;
-    else {
-      this.isOwner = false;
-      this.hasJoined = this.userGroup.members.includes(currentUser.id);
-      this.hasRequested = this.userGroup.requestsToJoin.includes(currentUser.id);
-    }
+    this.canEdit = this.userGroupService.canUserIdEdit(this.userGroup, currentUser.id);
+    this.isOwner = this.userGroup.ownerId === currentUser.id;
+    this.hasJoined = this.userGroup.members.includes(currentUser.id);
+    this.hasRequested = this.userGroup.requestsToJoin.includes(currentUser.id);
   }
 
   onDelete() {

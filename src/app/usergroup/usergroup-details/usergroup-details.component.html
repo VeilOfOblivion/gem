@@ -5,16 +5,10 @@
         Eigentümer: {{isOwner ? "Du": userGroup.owner}}
     </div>
     <div *ngIf="userService.getCurrentUser()">
-        <div *ngIf="isOwner">
-            <div><button mat-button routerLink="edit">Edit</button></div>
-            <div>
-                <button mat-button color="warn" (click)="onDelete()">
-                    Delete
-                </button>
-            </div>
-            <div
-                *ngIf="userGroup.permissionToJoinRequired && userGroup.requestsToJoin.length > 0"
-            >
+        <div>
+            <div *ngIf="canEdit"><button mat-button routerLink="edit">Editieren</button></div>
+            <div *ngIf="isOwner"><button mat-button color="warn" (click)="onDelete()">Löschen</button></div>
+            <div *ngIf="userGroup.permissionToJoinRequired && userGroup.requestsToJoin.length > 0">
                 Beitrittsanfragen ({{userGroup.requestsToJoin.length}}):
                 <ul>
                     <li
@@ -58,38 +52,4 @@
             </div>
         </div>
     </div>
-    <!--
-    <div *ngIf="canInviteUsers">
-        <a routerLink="edit">Editieren</a>
-        <form (ngSubmit)="onSubmit(f)" #f="ngForm">
-            <mat-form-field>
-                <mat-label for="invitee">Benutzer</mat-label>
-                <input
-                    matInput
-                    ngModel
-                    type="text"
-                    name="invitee"
-                    id="invitee"
-                    required
-                    #username="ngModel"
-                />
-            </mat-form-field>
-            <button mat-button [disabled]="f.invalid" type="submit">
-                Einladen
-            </button>
-        </form>
-    </div>
-
-    <div *ngIf="isInvited">
-        <a routerLink="." (click)="acceptInvitation()">Einladung akzeptieren</a>
-    </div>
-    <div *ngIf="isInvited">
-        <a routerLink="." (click)="removeInvitation()">Einladung verwerfen</a>
-    </div>
-    <div *ngIf="isMember">
-        <a routerLink="." (click)="leaveGroup()">Gruppe verlassen</a>
-    </div>
-    <div *ngIf="!isMember && !isInvited && !isOwner">
-        <a routerLink="." (click)="joinGroup()">Gruppe beitreten</a>
-    </div>
---></div>
+</div>

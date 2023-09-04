@@ -21,6 +21,8 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
   hasInvitees = false;
   hasRequestors = false;
   hasExcludees = false;
+  canEditUsers = false;
+  isOwner = false;
 
   constructor(public userService: UserService, public userGroupsService: UsergroupsService, public router: Router, public route: ActivatedRoute) { }
 
@@ -40,13 +42,17 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
 
   updateUserGroup(userGroup: UserGroup | undefined): void {
     this.selectedGroup = userGroup;
-    if (!this.selectedGroup || this.selectedGroup?.ownerId != this.userService.getCurrentUser()?.id)
+    const currentUserId = this.userService.getCurrentUser()?.id;
+    if (!currentUserId) return;
+    if (!this.selectedGroup || !this.userGroupsService.canUserIdEdit(this.selectedGroup, currentUserId))
       this.router.navigate(["../"], { relativeTo: this.route });
     else {
       this.hasMembers = this.selectedGroup.members.length > 0;
       this.hasInvitees = this.selectedGroup.invitees.length > 0;
       this.hasRequestors = this.selectedGroup.requestsToJoin.length > 0;
       this.hasExcludees = this.selectedGroup.excludees.length > 0;
+      this.canEditUsers = this.userGroupsService.canUserIdManage(this.selectedGroup, currentUserId);
+      this.isOwner = this.selectedGroup.ownerId === currentUserId;
       this.initForm();
     }
   }
@@ -80,7 +86,9 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
       const memberUsernames = this.selectedGroup ? this.selectedGroup.memberUsernames : [];
       const excludees = this.selectedGroup ? this.selectedGroup.excludees : [];
       const excludeeUsernames = this.selectedGroup ? this.selectedGroup.excludeeUsernames : [];
-      const group = new UserGroup(this.id, title, description, currentUser.id, currentUser.username, registrationRequired, invitationRequired, visibleToFriends, permissionToJoinRequired, requestsToJoin, invitees, members, excludees, memberUsernames, inviteeUsernames, excludeeUsernames, requestUsernames);
+      const usersWhoCanEdit = this.selectedGroup ? this.selectedGroup.usersWhoCanEdit : [];
+      const usersWhoCanManage = this.selectedGroup ? this.selectedGroup.usersWhoCanManage : [];
+      const group = new UserGroup(this.id, title, description, currentUser.id, currentUser.username, registrationRequired, invitationRequired, visibleToFriends, permissionToJoinRequired, requestsToJoin, invitees, members, excludees, memberUsernames, inviteeUsernames, excludeeUsernames, requestUsernames, usersWhoCanEdit, usersWhoCanManage);
       this.userGroupsService.addGroup(group, (newGroup: UserGroup, isNew: boolean) => {
         if (isNew)
           this.router.navigate(["..", newGroup.id], { relativeTo: this.route })
@@ -105,6 +113,12 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
     this.userGroupsService.removeMemberByIds(this.selectedGroup?.id, id);
   }
 
+  onAcceptRequestor(index: number) {
+    if (!this.selectedGroup) return;
+    const id = this.selectedGroup?.requestsToJoin[index];
+    this.userGroupsService.acceptRequestByIds(id, this.selectedGroup?.id);
+  }
+
   onRemoveRequestor(index: number) {
     if (!this.selectedGroup) return;
     const id = this.selectedGroup?.requestsToJoin[index];
@@ -121,5 +135,27 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
     if (!this.selectedGroup) return;
     const id = this.selectedGroup?.excludees[index];
     this.userGroupsService.removeExcludeeByIds(this.selectedGroup?.id, id);
+  }
+
+  onToggleEdit(index: number, status: boolean) {
+    if (!this.selectedGroup) return;
+    const id = this.selectedGroup?.members[index];
+    this.userGroupsService.setUserEditRight(this.selectedGroup.id, id, status);
+  }
+  
+  onToggleManage(index: number, status: boolean) {
+    if (!this.selectedGroup) return;
+    const id = this.selectedGroup?.members[index];
+    this.userGroupsService.setUserManageRight(this.selectedGroup.id, id, status );
+  }
+
+  isAbleToEdit(userId: string) : boolean {
+    if (!this.selectedGroup) return false;
+    return this.selectedGroup.usersWhoCanEdit.includes(userId);
+  }
+
+  isAbleToManage(userId: string) : boolean {
+    if (!this.selectedGroup) return false;
+    return this.selectedGroup.usersWhoCanManage.includes(userId);
   }
 }

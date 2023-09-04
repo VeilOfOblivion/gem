@@ -17,5 +17,7 @@ export class UserGroup {
     public inviteeUsernames: string[],
     public excludeeUsernames: string[],
     public requestUsernames: string[],
+    public usersWhoCanEdit: string[],
+    public usersWhoCanManage: string[],
   ) {}
 }

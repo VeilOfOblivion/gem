@@ -197,4 +197,37 @@ export class UsergroupsService {
       }
     });
   }
+
+  canUserIdEdit(userGroup: UserGroup | undefined, userId: string | undefined) : boolean {
+    if (!userGroup || !userId) return false;
+    return (userGroup.ownerId == userId || userGroup.usersWhoCanEdit.includes(userId));
+  }
+
+  canUserIdManage(userGroup: UserGroup | undefined, userId: string | undefined) : boolean {
+    if (!userGroup || !userId) return false;
+    return (userGroup.ownerId == userId || userGroup.usersWhoCanManage.includes(userId));
+  }
+
+  setUserEditRight(userGroupId: string | undefined, userId: string | undefined, status: boolean) {
+    if (!this.userService.getCurrentUser()) return;
+    let endpoint = status ? "/grantEditRight" : "/revokeEditRight" ;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + endpoint, { id: userId }).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
+  setUserManageRight(userGroupId: string | undefined, userId: string | undefined, status: boolean) {
+    if (!this.userService.getCurrentUser()) return;
+    let endpoint = status ? "/grantManageRight" : "/revokeManageRight" ;
+    this.http.put(environment.apiUrl + "/user-group/" + userGroupId + endpoint, { id: userId }).subscribe({
+      next: () => {
+        this.getAllUserGroups((groups) => {
+          this.onUserGroupChange.next(groups);
+        });
+      }
+    });
+  }
 }

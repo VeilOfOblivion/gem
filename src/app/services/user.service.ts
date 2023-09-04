@@ -53,7 +53,6 @@ export class UserService {
       error: (error) => {
         this._currentUser = undefined;
         this.onUserChange.next(undefined);
-        console.log(error)
         onWrongCredentials();
       }
     });
