@@ -21,7 +21,8 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
   hasInvitees = false;
   hasRequestors = false;
   hasExcludees = false;
-  canEditUsers = false;
+  canManage = false;
+  canEdit = false;
   isOwner = false;
 
   constructor(public userService: UserService, public userGroupsService: UsergroupsService, public router: Router, public route: ActivatedRoute) { }
@@ -44,14 +45,15 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
     this.selectedGroup = userGroup;
     const currentUserId = this.userService.getCurrentUser()?.id;
     if (!currentUserId) return;
-    if (!this.selectedGroup || !this.userGroupsService.canUserIdEdit(this.selectedGroup, currentUserId))
+    if (!this.selectedGroup || (!this.userGroupsService.canUserIdEdit(this.selectedGroup, currentUserId) && !this.userGroupsService.canUserIdManage(this.selectedGroup, currentUserId)))
       this.router.navigate(["../"], { relativeTo: this.route });
     else {
       this.hasMembers = this.selectedGroup.members.length > 0;
       this.hasInvitees = this.selectedGroup.invitees.length > 0;
       this.hasRequestors = this.selectedGroup.requestsToJoin.length > 0;
       this.hasExcludees = this.selectedGroup.excludees.length > 0;
-      this.canEditUsers = this.userGroupsService.canUserIdManage(this.selectedGroup, currentUserId);
+      this.canEdit = this.userGroupsService.canUserIdEdit(this.selectedGroup, currentUserId);
+      this.canManage = this.userGroupsService.canUserIdManage(this.selectedGroup, currentUserId);
       this.isOwner = this.selectedGroup.ownerId === currentUserId;
       this.initForm();
     }
@@ -142,19 +144,19 @@ export class UsergroupEditComponent implements OnInit, OnDestroy {
     const id = this.selectedGroup?.members[index];
     this.userGroupsService.setUserEditRight(this.selectedGroup.id, id, status);
   }
-  
+
   onToggleManage(index: number, status: boolean) {
     if (!this.selectedGroup) return;
     const id = this.selectedGroup?.members[index];
-    this.userGroupsService.setUserManageRight(this.selectedGroup.id, id, status );
+    this.userGroupsService.setUserManageRight(this.selectedGroup.id, id, status);
   }
 
-  isAbleToEdit(userId: string) : boolean {
+  isAbleToEdit(userId: string): boolean {
     if (!this.selectedGroup) return false;
     return this.selectedGroup.usersWhoCanEdit.includes(userId);
   }
 
-  isAbleToManage(userId: string) : boolean {
+  isAbleToManage(userId: string): boolean {
     if (!this.selectedGroup) return false;
     return this.selectedGroup.usersWhoCanManage.includes(userId);
   }

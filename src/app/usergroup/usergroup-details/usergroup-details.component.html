@@ -6,9 +6,17 @@
     </div>
     <div *ngIf="userService.getCurrentUser()">
         <div>
-            <div *ngIf="canEdit"><button mat-button routerLink="edit">Editieren</button></div>
-            <div *ngIf="isOwner"><button mat-button color="warn" (click)="onDelete()">Löschen</button></div>
-            <div *ngIf="userGroup.permissionToJoinRequired && userGroup.requestsToJoin.length > 0">
+            <div *ngIf="canEdit || canManage">
+                <button mat-button routerLink="edit">Editieren</button>
+            </div>
+            <div *ngIf="isOwner">
+                <button mat-button color="warn" (click)="onDelete()">
+                    Löschen
+                </button>
+            </div>
+            <div
+                *ngIf="userGroup.permissionToJoinRequired && userGroup.requestsToJoin.length > 0"
+            >
                 Beitrittsanfragen ({{userGroup.requestsToJoin.length}}):
                 <ul>
                     <li

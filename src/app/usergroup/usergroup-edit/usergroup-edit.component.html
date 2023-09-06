@@ -1,5 +1,5 @@
 <div *ngIf="selectedGroup">
-    <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="groupForm" (ngSubmit)="onSubmit()" *ngIf="canEdit">
         <mat-form-field>
             <mat-label>Title:</mat-label>
             <input matInput type="text" formControlName="title" />
@@ -25,9 +25,8 @@
         <hr />
         <button mat-button color="primary" type="submit">Speichern</button>
     </form>
-    <div *ngIf="canEditUsers">
-        <div *ngIf="hasMembers">
-            Mitglieder:
+    <div *ngIf="canManage">
+        <div>
             <table>
                 <tr>
                     <th>Username</th>
@@ -36,41 +35,112 @@
                     <th><span *ngIf="isOwner">Gruppe Editieren</span></th>
                     <th><span *ngIf="isOwner">Benutzer verwalten</span></th>
                 </tr>
-                <tr *ngFor="let member of selectedGroup?.memberUsernames; let i = index;">
+                <tr
+                    *ngFor="let member of selectedGroup?.memberUsernames; let i = index;"
+                >
                     <td>{{member}}</td>
                     <td>Mitglied</td>
-                    <td><button *ngIf="canEditUsers" mat-button color="warn" (click)="onRemoveMember(i)">X</button></td>
-                    <td><mat-checkbox (click)="onToggleEdit(i, edit.checked)" [checked]="isAbleToEdit(selectedGroup.members[i])" *ngIf="isOwner" #edit></mat-checkbox></td>
-                    <td><mat-checkbox (click)="onToggleManage(i, manage.checked)" [checked]="isAbleToManage(selectedGroup.members[i])"  *ngIf="isOwner" #manage></mat-checkbox></td>
+                    <td>
+                        <button
+                            *ngIf="canManage"
+                            mat-button
+                            color="warn"
+                            (click)="onRemoveMember(i)"
+                        >
+                            X
+                        </button>
+                    </td>
+                    <td>
+                        <mat-checkbox
+                            (click)="onToggleEdit(i, edit.checked)"
+                            [checked]="isAbleToEdit(selectedGroup.members[i])"
+                            *ngIf="isOwner"
+                            #edit
+                        ></mat-checkbox>
+                    </td>
+                    <td>
+                        <mat-checkbox
+                            (click)="onToggleManage(i, manage.checked)"
+                            [checked]="isAbleToManage(selectedGroup.members[i])"
+                            *ngIf="isOwner"
+                            #manage
+                        ></mat-checkbox>
+                    </td>
                 </tr>
-                <tr *ngFor="let requestor of selectedGroup?.requestUsernames; let i = index;">
+                <tr
+                    *ngFor="let requestor of selectedGroup?.requestUsernames; let i = index;"
+                >
                     <td>{{requestor}}</td>
                     <td>Beitrittsanfrage</td>
-                    <td><button *ngIf="canEditUsers" mat-button color="primary" (click)="onAcceptRequestor(i)"> &check;</button> <button *ngIf="canEditUsers" mat-button color="warn" (click)="onRemoveRequestor(i)">X</button></td>
+                    <td>
+                        <button
+                            *ngIf="canManage"
+                            mat-button
+                            color="primary"
+                            (click)="onAcceptRequestor(i)"
+                        >
+                            &check;
+                        </button>
+                        <button
+                            *ngIf="canManage"
+                            mat-button
+                            color="warn"
+                            (click)="onRemoveRequestor(i)"
+                        >
+                            X
+                        </button>
+                    </td>
                     <td></td>
                     <td></td>
                 </tr>
-                <tr *ngFor="let invitee of selectedGroup?.inviteeUsernames; let i = index;">
+                <tr
+                    *ngFor="let invitee of selectedGroup?.inviteeUsernames; let i = index;"
+                >
                     <td>{{invitee}}</td>
                     <td>Eingeladen</td>
-                    <td><button *ngIf="canEditUsers" mat-button color="warn" (click)="onRemoveInvitee(i)">X</button></td>
+                    <td>
+                        <button
+                            *ngIf="canManage"
+                            mat-button
+                            color="warn"
+                            (click)="onRemoveInvitee(i)"
+                        >
+                            X
+                        </button>
+                    </td>
                     <td></td>
                     <td></td>
                 </tr>
-                <tr *ngFor="let excludee of selectedGroup?.excludeeUsernames; let i = index;">
+                <tr
+                    *ngFor="let excludee of selectedGroup?.excludeeUsernames; let i = index;"
+                >
                     <td>{{excludee}}</td>
                     <td>Ausgeschlossen</td>
-                    <td><button *ngIf="canEditUsers" mat-button color="warn" (click)="onRemoveExcludee(i)">X</button></td>
+                    <td>
+                        <button
+                            *ngIf="canManage"
+                            mat-button
+                            color="warn"
+                            (click)="onRemoveExcludee(i)"
+                        >
+                            X
+                        </button>
+                    </td>
                     <td></td>
                     <td></td>
                 </tr>
             </table>
         </div>
-        
-        <div *ngIf="canEditUsers">
+
+        <div *ngIf="canManage">
             <mat-form-field>
                 <mat-label>Benutzer einladen:</mat-label>
-                <input matInput type="text" placeholder="Benutzername" #newInvitee />
+                <input
+                    matInput
+                    type="text"
+                    placeholder="Benutzername"
+                    #newInvitee
+                />
                 <button
                     mat-button
                     type="submit"
@@ -80,10 +150,15 @@
                 </button>
             </mat-form-field>
         </div>
-        <div *ngIf="canEditUsers">
+        <div *ngIf="canManage">
             <mat-form-field>
                 <mat-label>Benutzer blockieren:</mat-label>
-                <input matInput type="text" placeholder="Benutzername" #newExcludee />
+                <input
+                    matInput
+                    type="text"
+                    placeholder="Benutzername"
+                    #newExcludee
+                />
                 <button
                     mat-button
                     type="submit"

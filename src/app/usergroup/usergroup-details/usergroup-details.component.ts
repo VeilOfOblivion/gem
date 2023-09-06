@@ -17,6 +17,7 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
   changeRouteSub: Subscription | undefined;
   changeUserGroupSub: Subscription | undefined;
   canEdit = false;
+  canManage = false;
   isOwner = false;
   hasJoined = false;
   hasRequested = false;
@@ -40,6 +41,7 @@ export class UsergroupDetailsComponent implements OnInit, OnDestroy {
     this.userGroup = foundUserGroup;
     if (!this.userGroup || !currentUser) return;
     this.canEdit = this.userGroupService.canUserIdEdit(this.userGroup, currentUser.id);
+    this.canManage = this.userGroupService.canUserIdManage(this.userGroup, currentUser.id);
     this.isOwner = this.userGroup.ownerId === currentUser.id;
     this.hasJoined = this.userGroup.members.includes(currentUser.id);
     this.hasRequested = this.userGroup.requestsToJoin.includes(currentUser.id);
